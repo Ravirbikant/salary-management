@@ -57,3 +57,40 @@ describe('GET /insights/jobtitle', () => {
         expect(response.body.country).toBe('India');
     });
 });
+
+describe('GET /insights/department', () => {
+    beforeEach(async () => {
+        await request(app).post('/employees').send({
+            first_name: 'Jane',
+            last_name: 'Doe',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: 60000,
+            department: 'Engineering',
+            email: 'jane.doe@test.com'
+        });
+
+        await request(app).post('/employees').send({
+            first_name: 'Mike',
+            last_name: 'Ross',
+            job_title: 'Designer',
+            country: 'India',
+            salary: 50000,
+            department: 'Design',
+            email: 'mike.ross@test.com'
+        });
+    });
+
+    it('should return average salary per department for a country', async () => {
+        const response = await request(app)
+            .get('/insights/department')
+            .query({ country: 'India' });
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body[0]).toHaveProperty('department');
+        expect(response.body[0]).toHaveProperty('average');
+        expect(response.body.find(d => d.department === 'Engineering').average).toBe(60000);
+        expect(response.body.find(d => d.department === 'Design').average).toBe(50000);
+    });
+});
