@@ -81,3 +81,26 @@ describe('DELETE /employees/:id', () => {
         expect(check.status).toBe(404);
     });
 });
+
+describe('GET /employees/:id', () => {
+    it('should return a single employee', async () => {
+        const created = await request(app).post('/employees').send({
+            first_name: 'Single',
+            last_name: 'Employee',
+            job_title: 'Manager',
+            country: 'India',
+            salary: 70000,
+            department: 'HR',
+            email: 'single.employee@test.com'
+        });
+
+        const response = await request(app).get(`/employees/${created.body.id}`);
+        expect(response.status).toBe(200);
+        expect(response.body.first_name).toBe('Single');
+    });
+
+    it('should return 404 if employee not found', async () => {
+        const response = await request(app).get('/employees/99999');
+        expect(response.status).toBe(404);
+    });
+});
