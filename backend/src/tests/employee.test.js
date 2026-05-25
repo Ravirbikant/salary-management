@@ -22,3 +22,21 @@ describe('GET /employees', () => {
         expect(Array.isArray(response.body)).toBe(true);
     });
 });
+
+describe('POST /employees', () => {
+    it('should create a new employee', async () => {
+        const newEmployee = {
+            first_name: 'Ravi',
+            last_name: 'Kant',
+            job_title: 'Software Engineer',
+            country: 'India',
+            salary: 150000,
+            department: 'Engineering',
+            email: 'ravi.kant@test.com'
+        };
+
+        const response = await request(app).post('/employees').send(newEmployee);
+        expect(response.status).toBe(201);
+        expect(response.body.first_name).toBe('Ravi');
+    });
+});
