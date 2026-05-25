@@ -43,5 +43,16 @@ const deleteEmployee = (req, res) => {
     res.json({ message: 'Employee deleted successfully' });
 };
 
-module.exports = { getAllEmployees, createEmployee, updateEmployee, deleteEmployee };
+const getEmployeeById = (req, res) => {
+    const { id } = req.params;
+    const employee = db.prepare('SELECT * FROM employees WHERE id = ?').get(id);
+
+    if (!employee) {
+        return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    res.json(employee);
+};
+
+module.exports = { getAllEmployees, getEmployeeById, createEmployee, updateEmployee, deleteEmployee };
 
