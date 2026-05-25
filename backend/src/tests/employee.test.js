@@ -61,3 +61,23 @@ describe('PUT /employees/:id', () => {
         expect(response.body.salary).toBe(60000);
     });
 });
+
+describe('DELETE /employees/:id', () => {
+    it('should delete an existing employee', async () => {
+        const created = await request(app).post('/employees').send({
+            first_name: 'Delete',
+            last_name: 'Me',
+            job_title: 'Tester',
+            country: 'India',
+            salary: 30000,
+            department: 'QA',
+            email: 'delete.me@test.com'
+        });
+
+        const response = await request(app).delete(`/employees/${created.body.id}`);
+        expect(response.status).toBe(200);
+
+        const check = await request(app).get(`/employees/${created.body.id}`);
+        expect(check.status).toBe(404);
+    });
+});
