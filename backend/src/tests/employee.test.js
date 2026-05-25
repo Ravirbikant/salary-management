@@ -40,3 +40,24 @@ describe('POST /employees', () => {
         expect(response.body.first_name).toBe('Ravi');
     });
 });
+
+describe('PUT /employees/:id', () => {
+    it('should update an existing employee', async () => {
+        const created = await request(app).post('/employees').send({
+            first_name: 'Test',
+            last_name: 'User',
+            job_title: 'Designer',
+            country: 'India',
+            salary: 40000,
+            department: 'Design',
+            email: 'test.user@test.com'
+        });
+
+        const response = await request(app)
+            .put(`/employees/${created.body.id}`)
+            .send({ salary: 60000 });
+
+        expect(response.status).toBe(200);
+        expect(response.body.salary).toBe(60000);
+    });
+});
