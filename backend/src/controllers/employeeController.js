@@ -5,4 +5,16 @@ const getAllEmployees = (req, res) => {
     res.json(employees);
 };
 
-module.exports = { getAllEmployees };
+const createEmployee = (req, res) => {
+    const { first_name, last_name, job_title, country, salary, department, email } = req.body;
+
+    const result = db.prepare(`
+    INSERT INTO employees (first_name, last_name, job_title, country, salary, department, email)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `).run(first_name, last_name, job_title, country, salary, department, email);
+
+    const employee = db.prepare(`SELECT * FROM employees WHERE id = ${result.lastInsertRowid}`).get();
+    res.status(201).json(employee);
+};
+
+module.exports = { getAllEmployees, createEmployee };
