@@ -17,4 +17,18 @@ const createEmployee = (req, res) => {
     res.status(201).json(employee);
 };
 
-module.exports = { getAllEmployees, createEmployee };
+const updateEmployee = (req, res) => {
+    const { id } = req.params;
+    const fields = req.body;
+
+    const setClause = Object.keys(fields).map(key => `${key} = ?`).join(', ');
+    const values = [...Object.values(fields), id];
+
+    db.prepare(`UPDATE employees SET ${setClause} WHERE id = ?`).run(...values);
+
+    const employee = db.prepare(`SELECT * FROM employees WHERE id = ${id}`).get();
+    res.json(employee);
+};
+
+module.exports = { getAllEmployees, createEmployee, updateEmployee };
+
