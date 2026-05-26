@@ -192,6 +192,13 @@ describe('PUT /employees/:id', () => {
             .send({ salary: 60000 });
         expect(response.status).toBe(404);
     });
+
+    it('should return 400 if id is not a number', async () => {
+        const response = await request(app)
+            .put('/employees/abc')
+            .send({ salary: 60000 });
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('DELETE /employees/:id', () => {
