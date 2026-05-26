@@ -219,6 +219,11 @@ describe('DELETE /employees/:id', () => {
         const check = await request(app).get(`/employees/${created.body.id}`);
         expect(check.status).toBe(404);
     });
+
+    it('should return 400 if id is not a number', async () => {
+        const response = await request(app).delete('/employees/abc');
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('GET /employees/:id', () => {
