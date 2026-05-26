@@ -12,6 +12,10 @@ const createEmployee = (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    if (salary < 0) {
+        return res.status(400).json({ error: 'Salary must be more than zero' });
+    }
+
     const result = db.prepare(`
     INSERT INTO employees (first_name, last_name, job_title, country, salary, department, email)
     VALUES (?, ?, ?, ?, ?, ?, ?)
