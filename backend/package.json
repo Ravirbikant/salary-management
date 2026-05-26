@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
-    "test:watch": "cross-env NODE_ENV=test jest --watchAll"
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "seed": "node src/seed.js",
+    "migrate": "node src/db/migrate.js"
   },
   "keywords": [],
   "author": "",

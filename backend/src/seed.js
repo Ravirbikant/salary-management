@@ -31,6 +31,7 @@ const randomSalary = () => Math.floor(Math.random() * 150000) + 30000;
 
 const seedEmployees = db.transaction(() => {
     db.prepare('DELETE FROM employees').run();
+    db.prepare("DELETE FROM sqlite_sequence WHERE name='employees'").run();
 
     const insert = db.prepare(`
     INSERT INTO employees (first_name, last_name, job_title, country, salary, department, email)
