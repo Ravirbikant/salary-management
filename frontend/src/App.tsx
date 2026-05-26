@@ -1,9 +1,6 @@
+import EmployeesPage from "./pages/EmployeesPage"
 function App() {
-
-  return (
-    <> Hello
-    </>
-  )
+  return <EmployeesPage />
 }
 
 export default App
