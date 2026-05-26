@@ -39,6 +39,18 @@ describe('POST /employees', () => {
         expect(response.status).toBe(201);
         expect(response.body.first_name).toBe('Ravi');
     });
+
+    it('should return 400 if first_name is missing', async () => {
+        const response = await request(app).post('/employees').send({
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'test@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('PUT /employees/:id', () => {
@@ -104,3 +116,4 @@ describe('GET /employees/:id', () => {
         expect(response.status).toBe(404);
     });
 });
+
