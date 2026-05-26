@@ -1,14 +1,21 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import EmployeeModal from '../components/EmployeeModal'
+import type { Employee } from '../types/employee';
+import { employeeService } from '../services/api';
 
 function EmployeesPage() {
     const [modalOpen, setModalOpen] = useState(false);
-    const [employeeData, setEmployeeData] = useState([])
+    const [employeeData, setEmployeeData] = useState<Employee>([])
 
     const handleAddEmployee = (employee: any) => {
         console.log('New employee:', employee)
     }
+
+
+    useEffect(() => {
+        employeeService.getAll().then(setEmployeeData)
+    }, [])
 
     return (
         <Box sx={{ p: 3 }}>
