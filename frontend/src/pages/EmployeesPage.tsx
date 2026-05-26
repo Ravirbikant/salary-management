@@ -1,12 +1,14 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box, TablePagination } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EmployeeModal from '../components/EmployeeModal'
 import type { Employee } from '../types/employee';
 import { employeeService } from '../services/api';
+import { PAGE_SIZE } from '../constants';
 
 function EmployeesPage() {
     const [modalOpen, setModalOpen] = useState(false);
     const [employeeData, setEmployeeData] = useState<Employee[]>([])
+    const [page, setPage] = useState(0)
 
     const handleAddEmployee = async (employee: any) => {
         const created = await employeeService.create(employee)
@@ -21,6 +23,13 @@ function EmployeesPage() {
     useEffect(() => {
         employeeService.getAll().then(setEmployeeData)
     }, [])
+
+    useEffect(() => {
+        if (page * PAGE_SIZE >= employeeData.length && page > 0) setPage(0)
+    }, [employeeData, page])
+
+    const startIndex = page * PAGE_SIZE
+    const visibleEmployees = employeeData.slice(startIndex, startIndex + PAGE_SIZE)
 
     return (
         <Box sx={{ p: 3 }}>
@@ -41,7 +50,7 @@ function EmployeesPage() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {employeeData.map(emp => (
+                        {visibleEmployees.map(emp => (
                             <TableRow key={emp.id}>
                                 <TableCell>{emp.first_name} {emp.last_name}</TableCell>
                                 <TableCell>{emp.job_title}</TableCell>
@@ -56,6 +65,14 @@ function EmployeesPage() {
                         ))}
                     </TableBody>
                 </Table>
+                <TablePagination
+                    component="div"
+                    count={employeeData.length}
+                    page={page}
+                    onPageChange={(_, newPage) => setPage(newPage)}
+                    rowsPerPage={PAGE_SIZE}
+                    rowsPerPageOptions={[PAGE_SIZE]}
+                />
             </TableContainer>
             <EmployeeModal
                 open={modalOpen}
