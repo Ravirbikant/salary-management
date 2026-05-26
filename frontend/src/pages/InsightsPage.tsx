@@ -6,4 +6,4 @@ function InsightsPage() {
     )
 }
 
-export default InsightsPage
+export default InsightsPage 
