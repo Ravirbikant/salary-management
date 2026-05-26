@@ -1,4 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box } from '@mui/material'
+import { useState } from 'react'
+import EmployeeModal from '../components/EmployeeModal'
 
 const dummyEmployees = [
     { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Software Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' },
@@ -7,11 +9,17 @@ const dummyEmployees = [
 ]
 
 function EmployeesPage() {
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const handleAddEmployee = (employee: any) => {
+        console.log('New employee:', employee)
+    }
+
     return (
         <Box sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Typography variant="h4">Employees</Typography>
-                <Button variant="contained">Add Employee</Button>
+                <Button variant="contained" onClick={() => setModalOpen(true)}>Add Employee</Button>
             </Box>
             <TableContainer component={Paper}>
                 <Table>
@@ -42,8 +50,13 @@ function EmployeesPage() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <EmployeeModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onSubmit={handleAddEmployee}
+            />
         </Box>
     )
 }
 
-export default EmployeesPage
+export default EmployeesPage;
