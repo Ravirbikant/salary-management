@@ -13,6 +13,10 @@ function EmployeesPage() {
         setEmployeeData(prev => [...prev, created])
     }
 
+    const handleDelete = async (id: number) => {
+        await employeeService.delete(id)
+        setEmployeeData(prev => prev.filter(emp => emp.id !== id))
+    }
 
     useEffect(() => {
         employeeService.getAll().then(setEmployeeData)
@@ -46,7 +50,7 @@ function EmployeesPage() {
                                 <TableCell>{emp.department}</TableCell>
                                 <TableCell>
                                     <Button size="small" color="primary">Edit</Button>
-                                    <Button size="small" color="error">Delete</Button>
+                                    <Button size="small" color="error" onClick={() => handleDelete(emp.id)}>Delete</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
