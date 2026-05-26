@@ -64,4 +64,31 @@ describe('EmployeesPage', () => {
             expect(screen.getByText('Jane Doe')).toBeInTheDocument()
         })
     })
+
+    it('deletes employee when delete is clicked', async () => {
+        const employees: Employee[] = [
+            { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' },
+            { id: 2, first_name: 'Jane', last_name: 'Doe', job_title: 'Designer', country: 'USA', salary: 60000, department: 'Design', email: 'jane@test.com' }
+        ]
+
+        vi.spyOn(api.employeeService, 'getAll').mockResolvedValue(employees)
+        vi.spyOn(api.employeeService, 'delete').mockResolvedValue({})
+
+        const user = userEvent.setup()
+        render(<EmployeesPage />)
+
+        await waitFor(() => {
+            expect(screen.getByText('Ravi Sharma')).toBeInTheDocument()
+            expect(screen.getByText('Jane Doe')).toBeInTheDocument()
+        })
+
+        const deleteButtons = screen.getAllByRole('button', { name: 'Delete' })
+        await user.click(deleteButtons[0])
+
+        expect(api.employeeService.delete).toHaveBeenCalledWith(1)
+
+        await waitFor(() => {
+            expect(screen.queryByText('Ravi Sharma')).not.toBeInTheDocument()
+        })
+    })
 })
