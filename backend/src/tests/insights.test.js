@@ -67,6 +67,11 @@ describe('GET /insights/jobtitle', () => {
         expect(response.body.job_title).toBe('Engineer');
         expect(response.body.country).toBe('India');
     });
+
+    it('should return 400 if query params are missing', async () => {
+        const response = await request(app).get('/insights/jobtitle');
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('GET /insights/department', () => {
