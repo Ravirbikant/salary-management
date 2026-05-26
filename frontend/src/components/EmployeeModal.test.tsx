@@ -6,4 +6,4 @@ describe('EmployeeModal', () => {
         render(<EmployeeModal open={true} onClose={() => { }} onSubmit={() => { }} />)
         expect(screen.getByText('Add Employee')).toBeInTheDocument()
     })
-})
+})  
