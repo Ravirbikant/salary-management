@@ -37,13 +37,18 @@ const updateEmployee = (req, res) => {
     const { id } = req.params;
     const fields = req.body;
 
+    const existing = db.prepare('SELECT * FROM employees WHERE id = ?').get(id);
+    if (!existing) {
+        return res.status(404).json({ error: 'Employee not found' });
+    }
+
     const setClause = Object.keys(fields).map(key => `${key} = ?`).join(', ');
     const values = [...Object.values(fields), id];
 
     db.prepare(`UPDATE employees SET ${setClause} WHERE id = ?`).run(...values);
 
-    const employee = db.prepare(`SELECT * FROM employees WHERE id = ${id}`).get();
-    res.json(employee);
+    const updated = db.prepare('SELECT * FROM employees WHERE id = ?').get(id);
+    res.json(updated);
 };
 
 const deleteEmployee = (req, res) => {
