@@ -125,6 +125,45 @@ describe('POST /employees', () => {
         });
         expect(response.status).toBe(400);
     });
+
+    it('should return 400 if last_name is blank spaces', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: '   ',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'blanklast@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
+
+    it('should return 400 if job_title is blank spaces', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: 'Sharma',
+            job_title: '   ',
+            country: 'India',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'blankjob@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
+
+    it('should return 400 if country is blank spaces', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            country: '   ',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'blankcountry@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('PUT /employees/:id', () => {
