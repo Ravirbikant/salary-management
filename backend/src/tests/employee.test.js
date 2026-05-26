@@ -89,6 +89,29 @@ describe('POST /employees', () => {
         });
         expect(response.status).toBe(400);
     });
+
+    it('should return 409 if email is duplicate', async () => {
+        await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'duplicate@test.com'
+        });
+
+        const response = await request(app).post('/employees').send({
+            first_name: 'Priya',
+            last_name: 'Singh',
+            job_title: 'Designer',
+            country: 'India',
+            salary: 60000,
+            department: 'Design',
+            email: 'duplicate@test.com'
+        });
+        expect(response.status).toBe(409);
+    });
 });
 
 describe('PUT /employees/:id', () => {
