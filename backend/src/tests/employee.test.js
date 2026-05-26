@@ -133,6 +133,13 @@ describe('PUT /employees/:id', () => {
         expect(response.status).toBe(200);
         expect(response.body.salary).toBe(60000);
     });
+
+    it('should return 404 if employee does not exist', async () => {
+        const response = await request(app)
+            .put('/employees/99999')
+            .send({ salary: 60000 });
+        expect(response.status).toBe(404);
+    });
 });
 
 describe('DELETE /employees/:id', () => {
