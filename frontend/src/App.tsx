@@ -1,6 +1,20 @@
-import EmployeesPage from "./pages/EmployeesPage"
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import EmployeesPage from './pages/EmployeesPage'
+import InsightsPage from './pages/InsightsPage'
+
 function App() {
-  return <EmployeesPage />
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Employees</Link>
+        <Link to="/insights">Insights</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<EmployeesPage />} />
+        <Route path="/insights" element={<InsightsPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
