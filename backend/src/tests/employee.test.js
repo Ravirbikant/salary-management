@@ -112,6 +112,19 @@ describe('POST /employees', () => {
         });
         expect(response.status).toBe(409);
     });
+
+    it('should return 400 if first_name is blank spaces', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: '   ',
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'emptyname@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('PUT /employees/:id', () => {
