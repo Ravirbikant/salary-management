@@ -58,6 +58,10 @@ const updateEmployee = (req, res) => {
 const deleteEmployee = (req, res) => {
     const { id } = req.params;
 
+    if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid ID format' });
+    }
+
     const employee = db.prepare('SELECT * FROM employees WHERE id = ?').get(id);
 
     if (!employee) {
