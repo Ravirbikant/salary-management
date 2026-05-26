@@ -76,6 +76,19 @@ describe('POST /employees', () => {
         });
         expect(response.status).toBe(400);
     });
+
+    it('should return 400 if salary is not a number', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: 'notanumber',
+            department: 'Engineering',
+            email: 'nonum@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('PUT /employees/:id', () => {
