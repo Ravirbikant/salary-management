@@ -37,6 +37,10 @@ const updateEmployee = (req, res) => {
     const { id } = req.params;
     const fields = req.body;
 
+    if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid ID format' });
+    }
+
     const existing = db.prepare('SELECT * FROM employees WHERE id = ?').get(id);
     if (!existing) {
         return res.status(404).json({ error: 'Employee not found' });
