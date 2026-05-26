@@ -16,14 +16,22 @@ const createEmployee = (req, res) => {
         return res.status(400).json({ error: 'Salary must be a positive number' });
     }
 
-    const result = db.prepare(`
+    try {
+        const result = db.prepare(`
     INSERT INTO employees (first_name, last_name, job_title, country, salary, department, email)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `).run(first_name, last_name, job_title, country, salary, department, email);
 
-    const employee = db.prepare(`SELECT * FROM employees WHERE id = ${result.lastInsertRowid}`).get();
-    res.status(201).json(employee);
-};
+        const employee = db.prepare(`SELECT * FROM employees WHERE id = ${result.lastInsertRowid}`).get();
+        res.status(201).json(employee);
+    } catch (error) {
+        if (error.message.includes('UNIQUE constraint failed')) {
+            return res.status(409).json({ error: 'Email already exists' });
+        }
+
+        res.status(500).json({ error: 'Internal server error' });
+    };
+}
 
 const updateEmployee = (req, res) => {
     const { id } = req.params;
