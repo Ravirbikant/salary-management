@@ -8,6 +8,10 @@ const getAllEmployees = (req, res) => {
 const createEmployee = (req, res) => {
     const { first_name, last_name, job_title, country, salary, department, email } = req.body;
 
+    if (!first_name || !last_name || !job_title || !country || !salary) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
     const result = db.prepare(`
     INSERT INTO employees (first_name, last_name, job_title, country, salary, department, email)
     VALUES (?, ?, ?, ?, ?, ?, ?)
