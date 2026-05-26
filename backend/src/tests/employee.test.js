@@ -51,6 +51,31 @@ describe('POST /employees', () => {
         });
         expect(response.status).toBe(400);
     });
+
+    it('should return 400 if country is missing', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            salary: 50000,
+            department: 'Engineering',
+            email: 'nocountry@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
+
+    it('should return 400 if salary is negative', async () => {
+        const response = await request(app).post('/employees').send({
+            first_name: 'Ravi',
+            last_name: 'Sharma',
+            job_title: 'Engineer',
+            country: 'India',
+            salary: -1000,
+            department: 'Engineering',
+            email: 'negative@test.com'
+        });
+        expect(response.status).toBe(400);
+    });
 });
 
 describe('PUT /employees/:id', () => {
