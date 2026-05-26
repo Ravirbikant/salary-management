@@ -37,8 +37,8 @@ function InsightsPage() {
             inCountryAndJob.length === 0
                 ? null
                 : Math.round(
-                      inCountryAndJob.reduce((sum, e) => sum + e.salary, 0) / inCountryAndJob.length
-                  )
+                    inCountryAndJob.reduce((sum, e) => sum + e.salary, 0) / inCountryAndJob.length
+                )
 
         return { min, max, avg, avgForJob }
     }, [country, jobTitle])
@@ -49,8 +49,10 @@ function InsightsPage() {
 
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                 <FormControl sx={{ minWidth: 160 }}>
-                    <InputLabel>Country</InputLabel>
+                    <InputLabel id="country-label">Country</InputLabel>
                     <Select
+                        id="country-select"
+                        labelId="country-label"
                         label="Country"
                         value={country}
                         onChange={e => setCountry(e.target.value)}
