@@ -91,4 +91,29 @@ describe('EmployeesPage', () => {
             expect(screen.queryByText('Ravi Sharma')).not.toBeInTheDocument()
         })
     })
+
+    it('opens edit modal with prefilled data when edit is clicked', async () => {
+        const employees: Employee[] = [
+            { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' }
+        ]
+
+        vi.spyOn(api.employeeService, 'getAll').mockResolvedValue(employees)
+
+        const user = userEvent.setup()
+        render(<EmployeesPage />)
+
+        await waitFor(() => {
+            expect(screen.getByText('Ravi Sharma')).toBeInTheDocument()
+        })
+
+        await user.click(screen.getByRole('button', { name: 'Edit' }))
+
+        expect(screen.getByLabelText('First Name')).toHaveValue('Ravi')
+        expect(screen.getByLabelText('Last Name')).toHaveValue('Sharma')
+        expect(screen.getByLabelText('Job Title')).toHaveValue('Engineer')
+        expect(screen.getByLabelText('Country')).toHaveValue('India')
+        expect(screen.getByLabelText('Salary')).toHaveValue(50000)
+        expect(screen.getByLabelText('Department')).toHaveValue('Engineering')
+        expect(screen.getByLabelText('Email')).toHaveValue('ravi@test.com')
+    })
 })
