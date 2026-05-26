@@ -6,7 +6,7 @@ import { employeeService } from '../services/api';
 
 function EmployeesPage() {
     const [modalOpen, setModalOpen] = useState(false);
-    const [employeeData, setEmployeeData] = useState<Employee>([])
+    const [employeeData, setEmployeeData] = useState<Employee[]>([])
 
     const handleAddEmployee = (employee: any) => {
         console.log('New employee:', employee)
