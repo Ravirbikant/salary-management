@@ -11,7 +11,13 @@ function EmployeesPage() {
     const [page, setPage] = useState(0)
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
 
-    const handleAddEmployee = async (employee: any) => {
+    const handleEmployeeSubmit = async (employee: any) => {
+        if (editingEmployee) {
+            const updated = await employeeService.update(editingEmployee.id, employee)
+            setEmployeeData(prev => prev.map(emp => emp.id === editingEmployee.id ? updated : emp))
+            return
+        }
+
         const created = await employeeService.create(employee)
         setEmployeeData(prev => [...prev, created])
     }
@@ -96,7 +102,7 @@ function EmployeesPage() {
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
                 employee={editingEmployee}
-                onSubmit={handleAddEmployee}
+                onSubmit={handleEmployeeSubmit}
             />
         </Box>
     )
