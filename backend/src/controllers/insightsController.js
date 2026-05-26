@@ -23,6 +23,10 @@ const getCountryInsights = (req, res) => {
 const getJobTitleInsights = (req, res) => {
   const { job_title, country } = req.query;
 
+  if (!job_title || !country) {
+    return res.status(400).json({ error: 'job_title and country are required' });
+  }
+
   const insights = db.prepare(`
     SELECT 
       AVG(salary) as average,
