@@ -2,14 +2,9 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { useState } from 'react'
 import EmployeeModal from '../components/EmployeeModal'
 
-const dummyEmployees = [
-    { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Software Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' },
-    { id: 2, first_name: 'Priya', last_name: 'Singh', job_title: 'Designer', country: 'India', salary: 70000, department: 'Design', email: 'priya@test.com' },
-    { id: 3, first_name: 'John', last_name: 'Doe', job_title: 'Product Manager', country: 'USA', salary: 90000, department: 'Product', email: 'john@test.com' },
-]
-
 function EmployeesPage() {
-    const [modalOpen, setModalOpen] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false);
+    const [employeeData, setEmployeeData] = useState([])
 
     const handleAddEmployee = (employee: any) => {
         console.log('New employee:', employee)
@@ -34,7 +29,7 @@ function EmployeesPage() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {dummyEmployees.map(emp => (
+                        {employeeData.map(emp => (
                             <TableRow key={emp.id}>
                                 <TableCell>{emp.first_name} {emp.last_name}</TableCell>
                                 <TableCell>{emp.job_title}</TableCell>
