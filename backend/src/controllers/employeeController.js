@@ -8,7 +8,7 @@ const getAllEmployees = (req, res) => {
 const createEmployee = (req, res) => {
     const { first_name, last_name, job_title, country, salary, department, email } = req.body;
 
-    if (!first_name?.trim() || !last_name || !job_title || !country || !salary) {
+    if (!first_name?.trim() || !last_name?.trim() || !job_title?.trim() || !country?.trim() || !salary) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
