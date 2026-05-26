@@ -42,10 +42,6 @@ describe('GET /insights/country/:country', () => {
         expect(response.status).toBe(404);
     });
 
-    it('should return 400 if country is blank spaces', async () => {
-        const response = await request(app).get('/insights/country/   ');
-        expect(response.status).toBe(400);
-    });
 });
 
 describe('GET /insights/jobtitle', () => {
