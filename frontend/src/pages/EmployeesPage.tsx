@@ -9,6 +9,7 @@ function EmployeesPage() {
     const [modalOpen, setModalOpen] = useState(false);
     const [employeeData, setEmployeeData] = useState<Employee[]>([])
     const [page, setPage] = useState(0)
+    const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
 
     const handleAddEmployee = async (employee: any) => {
         const created = await employeeService.create(employee)
@@ -35,7 +36,15 @@ function EmployeesPage() {
         <Box sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Typography variant="h4">Employees</Typography>
-                <Button variant="contained" onClick={() => setModalOpen(true)}>Add Employee</Button>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        setEditingEmployee(null)
+                        setModalOpen(true)
+                    }}
+                >
+                    Add Employee
+                </Button>
             </Box>
             <TableContainer component={Paper}>
                 <Table>
@@ -58,7 +67,16 @@ function EmployeesPage() {
                                 <TableCell>${emp.salary.toLocaleString()}</TableCell>
                                 <TableCell>{emp.department}</TableCell>
                                 <TableCell>
-                                    <Button size="small" color="primary">Edit</Button>
+                                    <Button
+                                        size="small"
+                                        color="primary"
+                                        onClick={() => {
+                                            setEditingEmployee(emp)
+                                            setModalOpen(true)
+                                        }}
+                                    >
+                                        Edit
+                                    </Button>
                                     <Button size="small" color="error" onClick={() => handleDelete(emp.id)}>Delete</Button>
                                 </TableCell>
                             </TableRow>
@@ -77,6 +95,7 @@ function EmployeesPage() {
             <EmployeeModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
+                employee={editingEmployee}
                 onSubmit={handleAddEmployee}
             />
         </Box>
