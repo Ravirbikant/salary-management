@@ -12,8 +12,8 @@ const createEmployee = (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    if (salary < 0) {
-        return res.status(400).json({ error: 'Salary must be more than zero' });
+    if (typeof salary !== 'number' || salary < 0) {
+        return res.status(400).json({ error: 'Salary must be a positive number' });
     }
 
     const result = db.prepare(`
