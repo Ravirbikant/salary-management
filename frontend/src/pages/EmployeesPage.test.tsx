@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import EmployeesPage from './EmployeesPage'
@@ -50,7 +50,8 @@ describe('EmployeesPage', () => {
         await user.type(screen.getByLabelText('Job Title'), 'Designer')
         await user.type(screen.getByLabelText('Country'), 'USA')
         await user.type(screen.getByLabelText('Salary'), '60000')
-        await user.type(screen.getByLabelText('Department'), 'Design')
+        await user.click(screen.getByRole('combobox'))
+        await user.click(screen.getByRole('option', { name: 'Design' }))
         await user.type(screen.getByLabelText('Email'), 'jane@test.com')
         await user.click(screen.getByRole('button', { name: 'Add' }))
 
@@ -120,7 +121,7 @@ describe('EmployeesPage', () => {
         expect(screen.getByLabelText('Job Title')).toHaveValue('Engineer')
         expect(screen.getByLabelText('Country')).toHaveValue('India')
         expect(screen.getByLabelText('Salary')).toHaveValue(50000)
-        expect(screen.getByLabelText('Department')).toHaveValue('Engineering')
+        expect(within(screen.getByRole('dialog')).getByText('Engineering')).toBeInTheDocument()
         expect(screen.getByLabelText('Email')).toHaveValue('ravi@test.com')
     })
 

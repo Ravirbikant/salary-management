@@ -1,6 +1,7 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import type { Employee } from '../types/employee'
+import { DEPARTMENTS } from '../constants'
 
 interface Props {
     open: boolean
@@ -63,7 +64,19 @@ function EmployeeModal({ open, onClose, onSubmit, employee }: Props) {
                     <TextField label="Job Title" name="job_title" value={form.job_title} onChange={handleChange} fullWidth />
                     <TextField label="Country" name="country" value={form.country} onChange={handleChange} fullWidth />
                     <TextField label="Salary" name="salary" type="number" value={form.salary} onChange={handleChange} fullWidth />
-                    <TextField label="Department" name="department" value={form.department} onChange={handleChange} fullWidth />
+                    <FormControl fullWidth>
+                        <InputLabel>Department</InputLabel>
+                        <Select
+                            label="Department"
+                            name="department"
+                            value={form.department}
+                            onChange={(e) => setForm({ ...form, department: e.target.value })}
+                        >
+                            {DEPARTMENTS.map(dept => (
+                                <MenuItem key={dept} value={dept}>{dept}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <TextField label="Email" name="email" value={form.email} onChange={handleChange} fullWidth />
                 </Box>
 
