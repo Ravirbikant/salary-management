@@ -173,4 +173,25 @@ describe('EmployeesPage', () => {
             expect(screen.queryByText('Engineer', { exact: true })).not.toBeInTheDocument()
         })
     })
+
+    it('shows confirmation dialog before deleting employee', async () => {
+        const employees: Employee[] = [
+            { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' }
+        ]
+
+        vi.spyOn(api.employeeService, 'getAll').mockResolvedValue(employees)
+        vi.spyOn(api.employeeService, 'delete').mockResolvedValue({})
+
+        const user = userEvent.setup()
+        render(<EmployeesPage />)
+
+        await waitFor(() => {
+            expect(screen.getByText('Ravi Sharma')).toBeInTheDocument()
+        })
+
+        await user.click(screen.getByRole('button', { name: 'Delete' }))
+
+        expect(screen.getByText('Are you sure you want to delete this employee?')).toBeInTheDocument()
+        expect(api.employeeService.delete).not.toHaveBeenCalled()
+    })
 })
