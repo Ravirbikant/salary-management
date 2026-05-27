@@ -23,6 +23,7 @@ function EmployeeTable({ employees, page, onPageChange, onEdit, onDelete }: Prop
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Name</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Job Title</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Country</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Email</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }} align="right">Salary</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Department</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }} align="center">Actions</TableCell>
@@ -34,6 +35,7 @@ function EmployeeTable({ employees, page, onPageChange, onEdit, onDelete }: Prop
                                 <TableCell>{emp.first_name} {emp.last_name}</TableCell>
                                 <TableCell>{emp.job_title}</TableCell>
                                 <TableCell>{emp.country}</TableCell>
+                                <TableCell>{emp.email}</TableCell>
                                 <TableCell align="right">${emp.salary.toLocaleString()}</TableCell>
                                 <TableCell>{emp.department}</TableCell>
                                 <TableCell align="center">
