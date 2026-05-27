@@ -16,9 +16,11 @@ describe('InsightsPage', () => {
         vi.spyOn(api.employeeService, 'getAll').mockResolvedValue(mockEmployees)
     })
 
-    it('renders country dropdown', () => {
+    it('renders country dropdown', async () => {
         render(<InsightsPage />)
-        expect(screen.getByLabelText('Country')).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByLabelText('Country')).toBeInTheDocument()
+        })
     })
 
     it('shows min salary for selected country', async () => {

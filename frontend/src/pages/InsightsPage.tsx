@@ -7,6 +7,7 @@ function InsightsPage() {
     const [employees, setEmployees] = useState<Employee[]>([])
     const [country, setCountry] = useState('')
     const [jobTitle, setJobTitle] = useState('')
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         employeeService.getAll().then(data => {
@@ -17,6 +18,7 @@ function InsightsPage() {
                 const firstTitle = data.find(e => e.country === firstCountry)?.job_title ?? ''
                 setJobTitle(firstTitle)
             }
+            setLoading(false)
         })
     }, [])
 
@@ -49,6 +51,8 @@ function InsightsPage() {
 
         return { min, max, avg, avgForJob }
     }, [employees, country, jobTitle])
+
+    if (loading) return <Typography>Loading...</Typography>
 
     return (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
