@@ -23,6 +23,7 @@ function EmployeesPage() {
         }
         const created = await employeeService.create(employee)
         setEmployeeData(prev => [created, ...prev])
+        setPage(0)
     }
 
     const handleDelete = async (id: number) => {
