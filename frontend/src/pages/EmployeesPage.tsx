@@ -11,6 +11,7 @@ function EmployeesPage() {
     const [page, setPage] = useState(0)
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null)
+    const [loading, setLoading] = useState(true)
 
     const handleEmployeeSubmit = async (employee: any) => {
         if (editingEmployee) {
@@ -30,7 +31,10 @@ function EmployeesPage() {
     }
 
     useEffect(() => {
-        employeeService.getAll().then(setEmployeeData)
+        employeeService.getAll().then(data => {
+            setEmployeeData(data)
+            setLoading(false)
+        })
     }, [])
 
     useEffect(() => {
@@ -39,6 +43,8 @@ function EmployeesPage() {
 
     const startIndex = page * PAGE_SIZE
     const visibleEmployees = employeeData.slice(startIndex, startIndex + PAGE_SIZE)
+
+    if (loading) return <Typography>Loading...</Typography>
 
     return (
         <Box sx={{ p: 3 }}>
