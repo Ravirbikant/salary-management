@@ -55,7 +55,7 @@ function EmployeeModal({ open, onClose, onSubmit, employee }: Props) {
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-            <DialogTitle>Add Employee</DialogTitle>
+            <DialogTitle>{employee ? 'Edit Employee' : 'Add Employee'}</DialogTitle>
             <DialogContent>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
                     <TextField label="First Name" name="first_name" value={form.first_name} onChange={handleChange} fullWidth />
@@ -71,7 +71,7 @@ function EmployeeModal({ open, onClose, onSubmit, employee }: Props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleSubmit} variant="contained">Add</Button>
+                <Button onClick={handleSubmit} variant="contained">{employee ? 'Save' : 'Add'}</Button>
             </DialogActions>
         </Dialog>
     )

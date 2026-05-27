@@ -163,7 +163,7 @@ describe('EmployeesPage', () => {
         await user.clear(screen.getByLabelText('Salary'))
         await user.type(screen.getByLabelText('Salary'), '55000')
 
-        await user.click(screen.getByRole('button', { name: 'Add' }))
+        await user.click(screen.getByRole('button', { name: 'Save' }))
 
         expect(api.employeeService.update).toHaveBeenCalledWith(1, {
             first_name: 'Ravi',
