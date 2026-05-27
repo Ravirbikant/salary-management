@@ -41,4 +41,12 @@ describe('InsightsPage', () => {
             expect(screen.getByText('Total Employees: 2')).toBeInTheDocument()
         })
     })
+
+    it('shows loading state while data is being fetched', async () => {
+        vi.spyOn(api.employeeService, 'getAll').mockImplementation(
+            () => new Promise(resolve => setTimeout(() => resolve(mockEmployees), 100))
+        )
+        render(<InsightsPage />)
+        expect(screen.getByText('Loading...')).toBeInTheDocument()
+    })
 })
