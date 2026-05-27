@@ -22,7 +22,7 @@ function EmployeesPage() {
             return
         }
         const created = await employeeService.create(employee)
-        setEmployeeData(prev => [...prev, created])
+        setEmployeeData(prev => [created, ...prev])
     }
 
     const handleDelete = async (id: number) => {
