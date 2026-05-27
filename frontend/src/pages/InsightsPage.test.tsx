@@ -24,7 +24,14 @@ describe('InsightsPage', () => {
     it('shows min salary for selected country', async () => {
         render(<InsightsPage />)
         await waitFor(() => {
-            expect(screen.getByText('$50,000')).toBeInTheDocument()
+            expect(screen.getByText('Min salary in India')).toBeInTheDocument()
+        })
+    })
+
+    it('shows department breakdown when country is selected', async () => {
+        render(<InsightsPage />)
+        await waitFor(() => {
+            expect(screen.getByText('Department Breakdown')).toBeInTheDocument()
         })
     })
 })

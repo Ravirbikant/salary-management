@@ -1,0 +1,24 @@
+---
+description: General coding rules
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Rules
+
+1. Follow the assessment requirements in `docs/assessment.md`
+2. Follow existing code patterns before introducing new ones
+3. Write minimal code — only what is needed to make the test pass
+4. No comments in code
+5. Keep explanations of code changes short and to the point. Try to avoid it.
+6. Do not add comments in the code.
+
+# TDD Workflow
+
+Always follow this loop strictly:
+1. Write a failing test
+2. Stop — do not write implementation code
+3. Wait for commit
+4. Write minimal code to make the test pass
+5. Wait for commit
+6. Go back to step 1
