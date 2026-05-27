@@ -8,6 +8,9 @@ import type { Employee } from '../types/employee'
 vi.mock('../services/api')
 
 describe('EmployeesPage', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
     it('should fetch and display employees on load', async () => {
         const mockEmployees: Employee[] = [
             { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' }
@@ -84,6 +87,9 @@ describe('EmployeesPage', () => {
 
         const deleteButtons = screen.getAllByRole('button', { name: 'Delete' })
         await user.click(deleteButtons[0])
+
+        const allDeleteButtons = screen.getAllByRole('button', { name: 'Delete', hidden: true })
+        await user.click(allDeleteButtons[allDeleteButtons.length - 1])
 
         expect(api.employeeService.delete).toHaveBeenCalledWith(1)
 

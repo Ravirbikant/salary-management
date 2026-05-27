@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box, TablePagination } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EmployeeModal from '../components/EmployeeModal'
 import type { Employee } from '../types/employee';
@@ -10,6 +10,7 @@ function EmployeesPage() {
     const [employeeData, setEmployeeData] = useState<Employee[]>([])
     const [page, setPage] = useState(0)
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
+    const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null)
 
     const handleEmployeeSubmit = async (employee: any) => {
         if (editingEmployee) {
@@ -25,6 +26,7 @@ function EmployeesPage() {
     const handleDelete = async (id: number) => {
         await employeeService.delete(id)
         setEmployeeData(prev => prev.filter(emp => emp.id !== id))
+        setDeleteConfirmId(null)
     }
 
     useEffect(() => {
@@ -83,7 +85,7 @@ function EmployeesPage() {
                                     >
                                         Edit
                                     </Button>
-                                    <Button size="small" color="error" onClick={() => handleDelete(emp.id)}>Delete</Button>
+                                    <Button size="small" color="error" onClick={() => setDeleteConfirmId(emp.id)}>Delete</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -104,6 +106,17 @@ function EmployeesPage() {
                 employee={editingEmployee}
                 onSubmit={handleEmployeeSubmit}
             />
+
+            <Dialog open={deleteConfirmId !== null} onClose={() => setDeleteConfirmId(null)}>
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <Typography>Are you sure you want to delete this employee?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteConfirmId(null)}>Cancel</Button>
+                    <Button color="error" onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}>Delete</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
