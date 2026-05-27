@@ -12,12 +12,12 @@ function InsightsPage() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        employeeService.getAll().then(data => {
+        employeeService.getAll().then((data: Employee[]) => {
             setEmployees(data)
             if (data.length > 0) {
                 const firstCountry = data[0].country
                 setCountry(firstCountry)
-                const firstTitle = data.find(e => e.country === firstCountry)?.job_title ?? ''
+                const firstTitle = data.find((e: Employee) => e.country === firstCountry)?.job_title ?? ''
                 setJobTitle(firstTitle)
             }
             setLoading(false)
