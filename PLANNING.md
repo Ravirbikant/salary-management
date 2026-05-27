@@ -7,7 +7,6 @@ Build a salary management tool for an HR Manager to:
 
 ## Architecture
 Frontend (React + Vite)     →     Backend (Express)     →     Database (SQLite)
-localhost:5173                    localhost:3001                salary.db
 
 ## Database Schema
 ```sql
@@ -59,6 +58,6 @@ Tests use SQLite in-memory database (NODE_ENV=test) so they never touch real dat
 Followed strict TDD on the backend — every endpoint has a failing test committed before implementation. Frontend TDD was applied for key interactions (fetch on mount, add, edit, delete, confirmation dialog, loading state).
 
 ## AI Usage
-- Claude (claude.ai) — used for step-by-step guidance, architectural decisions, TDD cycle guidance, debugging test failures
-- Cursor — used for frontend component generation and refactoring
+- Claude (claude.ai) : used for step-by-step guidance, architectural decisions, TDD cycle guidance, debugging test failures
+- Cursor : used for frontend component generation and refactoring
 - All AI output was reviewed, understood, and modified where needed before committing
