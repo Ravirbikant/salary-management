@@ -121,6 +121,13 @@ function InsightsPage() {
                         </CardContent>
                     </Card>
 
+                    <Card>
+                        <CardContent>
+                            <Typography variant="subtitle2">Total Employees in {country}</Typography>
+                            <Typography variant="h6">Total Employees: {employees.filter(e => e.country === country).length}</Typography>
+                        </CardContent>
+                    </Card>
+
                     <Typography variant="h6" sx={{ mt: 2 }}>Department Breakdown</Typography>
                     <TableContainer component={Paper}>
                         <Table size="small">
