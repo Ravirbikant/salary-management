@@ -1,12 +1,13 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import { Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EmployeeModal from '../components/EmployeeModal'
-import type { Employee } from '../types/employee';
-import { employeeService } from '../services/api';
-import { PAGE_SIZE } from '../constants';
+import EmployeeTable from '../components/EmployeeTable'
+import type { Employee } from '../types/employee'
+import { employeeService } from '../services/api'
+import { PAGE_SIZE } from '../constants'
 
 function EmployeesPage() {
-    const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false)
     const [employeeData, setEmployeeData] = useState<Employee[]>([])
     const [page, setPage] = useState(0)
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
@@ -19,7 +20,6 @@ function EmployeesPage() {
             setEmployeeData(prev => prev.map(emp => emp.id === editingEmployee.id ? updated : emp))
             return
         }
-
         const created = await employeeService.create(employee)
         setEmployeeData(prev => [...prev, created])
     }
@@ -41,9 +41,6 @@ function EmployeesPage() {
         if (page * PAGE_SIZE >= employeeData.length && page > 0) setPage(0)
     }, [employeeData, page])
 
-    const startIndex = page * PAGE_SIZE
-    const visibleEmployees = employeeData.slice(startIndex, startIndex + PAGE_SIZE)
-
     if (loading) return <Typography>Loading...</Typography>
 
     return (
@@ -60,52 +57,15 @@ function EmployeesPage() {
                     Add Employee
                 </Button>
             </Box>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Job Title</TableCell>
-                            <TableCell>Country</TableCell>
-                            <TableCell>Salary</TableCell>
-                            <TableCell>Department</TableCell>
-                            <TableCell>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {visibleEmployees.map(emp => (
-                            <TableRow key={emp.id}>
-                                <TableCell>{emp.first_name} {emp.last_name}</TableCell>
-                                <TableCell>{emp.job_title}</TableCell>
-                                <TableCell>{emp.country}</TableCell>
-                                <TableCell>${emp.salary.toLocaleString()}</TableCell>
-                                <TableCell>{emp.department}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        size="small"
-                                        color="primary"
-                                        onClick={() => {
-                                            setEditingEmployee(emp)
-                                            setModalOpen(true)
-                                        }}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button size="small" color="error" onClick={() => setDeleteConfirmId(emp.id)}>Delete</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <TablePagination
-                    component="div"
-                    count={employeeData.length}
-                    page={page}
-                    onPageChange={(_, newPage) => setPage(newPage)}
-                    rowsPerPage={PAGE_SIZE}
-                    rowsPerPageOptions={[PAGE_SIZE]}
-                />
-            </TableContainer>
+
+            <EmployeeTable
+                employees={employeeData}
+                page={page}
+                onPageChange={setPage}
+                onEdit={(emp) => { setEditingEmployee(emp); setModalOpen(true) }}
+                onDelete={setDeleteConfirmId}
+            />
+
             <EmployeeModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
@@ -127,4 +87,4 @@ function EmployeesPage() {
     )
 }
 
-export default EmployeesPage;
+export default EmployeesPage
