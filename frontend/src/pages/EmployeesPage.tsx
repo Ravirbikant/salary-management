@@ -1,4 +1,4 @@
-import { Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import { Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EmployeeModal from '../components/EmployeeModal'
 import EmployeeTable from '../components/EmployeeTable'
@@ -13,6 +13,7 @@ function EmployeesPage() {
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null)
     const [loading, setLoading] = useState(true)
+    const [search, setSearch] = useState('')
 
     const handleEmployeeSubmit = async (employee: any) => {
         if (editingEmployee) {
@@ -30,6 +31,16 @@ function EmployeesPage() {
         setDeleteConfirmId(null)
     }
 
+    const filteredEmployees = employeeData.filter(emp => {
+        const query = search.toLowerCase()
+        return (
+            `${emp.first_name} ${emp.last_name}`.toLowerCase().includes(query) ||
+            emp.last_name.toLowerCase().includes(query) ||
+            emp.job_title.toLowerCase().includes(query) ||
+            emp.country.toLowerCase().includes(query)
+        )
+    })
+
     useEffect(() => {
         employeeService.getAll().then(data => {
             setEmployeeData(data)
@@ -45,21 +56,30 @@ function EmployeesPage() {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h4">Employees</Typography>
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        setEditingEmployee(null)
-                        setModalOpen(true)
-                    }}
-                >
-                    Add Employee
-                </Button>
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                    <TextField
+                        placeholder="Search..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        size="small"
+                        sx={{ width: 220 }}
+                    />
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            setEditingEmployee(null)
+                            setModalOpen(true)
+                        }}
+                    >
+                        Add Employee
+                    </Button>
+                </Box>
             </Box>
 
             <EmployeeTable
-                employees={employeeData}
+                employees={filteredEmployees}
                 page={page}
                 onPageChange={setPage}
                 onEdit={(emp) => { setEditingEmployee(emp); setModalOpen(true) }}
