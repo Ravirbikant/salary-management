@@ -61,3 +61,7 @@ Followed strict TDD on the backend — every endpoint has a failing test committ
 - Claude (claude.ai) : used for step-by-step guidance, architectural decisions, TDD cycle guidance, debugging test failures
 - Cursor : used for frontend component generation and refactoring
 - All AI output was reviewed, understood, and modified where needed before committing
+
+### Auto-migration on startup
+Migration runs on server startup using `IF NOT EXISTS` — idempotent and safe. 
+Seeding runs only when database is empty, ensuring data persists across restarts.

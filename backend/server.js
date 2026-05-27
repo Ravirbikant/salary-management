@@ -2,6 +2,8 @@ require('dotenv').config()
 const db = require('./src/db/database')
 const app = require('./src/app')
 
+// Migration runs on every startup (idempotent due to IF NOT EXISTS)
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS employees (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,6 +18,7 @@ db.exec(`
   )
 `)
 
+// Seeding runs only when database is empty (first deploy)
 const count = db.prepare('SELECT COUNT(*) as count FROM employees').get()
 if (count.count === 0) {
     console.log('Empty database, seeding...')
