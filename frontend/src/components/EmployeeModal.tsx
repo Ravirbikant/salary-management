@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import type { Employee } from '../types/employee'
 
@@ -21,6 +21,7 @@ const emptyForm = {
 
 function EmployeeModal({ open, onClose, onSubmit, employee }: Props) {
     const [form, setForm] = useState(emptyForm)
+    const [error, setError] = useState('')
 
     useEffect(() => {
         if (employee) {
@@ -43,6 +44,11 @@ function EmployeeModal({ open, onClose, onSubmit, employee }: Props) {
     }
 
     const handleSubmit = () => {
+        if (!form.first_name.trim() || !form.last_name.trim() || !form.job_title.trim() || !form.country.trim() || !form.salary) {
+            setError('Please fill in all required fields')
+            return
+        }
+        setError('')
         onSubmit({ ...form, salary: Number(form.salary) })
         onClose()
     }
@@ -60,6 +66,8 @@ function EmployeeModal({ open, onClose, onSubmit, employee }: Props) {
                     <TextField label="Department" name="department" value={form.department} onChange={handleChange} fullWidth />
                     <TextField label="Email" name="email" value={form.email} onChange={handleChange} fullWidth />
                 </Box>
+
+                {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
