@@ -1,7 +1,9 @@
-import { Box, Card, CardContent, FormControl, InputLabel, MenuItem, Paper, TableRow, TableHead, Table, TableContainer, Typography, TableBody, TableCell, Select } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import type { Employee } from '../types/employee'
 import { employeeService } from '../services/api'
+import StatCard from '../components/StatCard'
+import DepartmentTable from '../components/DepartmentTable'
 
 function InsightsPage() {
     const [employees, setEmployees] = useState<Employee[]>([])
@@ -40,16 +42,14 @@ function InsightsPage() {
         const min = Math.min(...salaries)
         const max = Math.max(...salaries)
         const avg = Math.round(salaries.reduce((sum, s) => sum + s, 0) / salaries.length)
+        const total = inCountry.length
 
         const inCountryAndJob = inCountry.filter(e => e.job_title === jobTitle)
-        const avgForJob =
-            inCountryAndJob.length === 0
-                ? null
-                : Math.round(
-                    inCountryAndJob.reduce((sum, e) => sum + e.salary, 0) / inCountryAndJob.length
-                )
+        const avgForJob = inCountryAndJob.length === 0
+            ? null
+            : Math.round(inCountryAndJob.reduce((sum, e) => sum + e.salary, 0) / inCountryAndJob.length)
 
-        return { min, max, avg, avgForJob }
+        return { min, max, avg, avgForJob, total }
     }, [employees, country, jobTitle])
 
     if (loading) return <Typography>Loading...</Typography>
@@ -69,9 +69,7 @@ function InsightsPage() {
                         onChange={e => setCountry(e.target.value)}
                     >
                         {countries.map(c => (
-                            <MenuItem key={c} value={c}>
-                                {c}
-                            </MenuItem>
+                            <MenuItem key={c} value={c}>{c}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -84,88 +82,30 @@ function InsightsPage() {
                         onChange={e => setJobTitle(e.target.value)}
                     >
                         {jobTitlesForCountry.map(title => (
-                            <MenuItem key={title} value={title}>
-                                {title}
-                            </MenuItem>
+                            <MenuItem key={title} value={title}>{title}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
             </Box>
 
             {stats && (
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="subtitle2">Min salary in {country}</Typography>
-                            <Typography variant="h6">${stats.min.toLocaleString()}</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="subtitle2">Max salary in {country}</Typography>
-                            <Typography variant="h6">${stats.max.toLocaleString()}</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="subtitle2">Avg salary in {country}</Typography>
-                            <Typography variant="h6">${stats.avg.toLocaleString()}</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="subtitle2">
-                                Avg salary for {jobTitle} in {country}
-                            </Typography>
-                            <Typography variant="h6">
-                                {stats.avgForJob == null
-                                    ? 'No data'
-                                    : `$${stats.avgForJob.toLocaleString()}`}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                <>
+                    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                        <StatCard label={`Min salary in ${country}`} value={`$${stats.min.toLocaleString()}`} />
+                        <StatCard label={`Max salary in ${country}`} value={`$${stats.max.toLocaleString()}`} />
+                        <StatCard label={`Avg salary in ${country}`} value={`$${stats.avg.toLocaleString()}`} />
+                        <StatCard
+                            label={`Avg salary for ${jobTitle} in ${country}`}
+                            value={stats.avgForJob == null ? 'No data' : `$${stats.avgForJob.toLocaleString()}`}
+                        />
+                        <StatCard label={`Total Employees in ${country}`} value={stats.total} />
+                    </Box>
 
-                    <Card>
-                        <CardContent>
-                            <Typography variant="subtitle2">Total Employees in {country}</Typography>
-                            <Typography variant="h6">Total Employees: {employees.filter(e => e.country === country).length}</Typography>
-                        </CardContent>
-                    </Card>
-
-                    <Typography variant="h6" sx={{ mt: 2 }}>Department Breakdown</Typography>
-                    <TableContainer component={Paper}>
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Department</TableCell>
-                                    <TableCell>Avg Salary</TableCell>
-                                    <TableCell>Min Salary</TableCell>
-                                    <TableCell>Max Salary</TableCell>
-                                    <TableCell>Employees</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {Object.entries(
-                                    employees
-                                        .filter(e => e.country === country)
-                                        .reduce((acc: any, e) => {
-                                            if (!acc[e.department]) acc[e.department] = []
-                                            acc[e.department].push(e.salary)
-                                            return acc
-                                        }, {})
-                                ).map(([dept, salaries]: any) => (
-                                    <TableRow key={dept}>
-                                        <TableCell>{dept}</TableCell>
-                                        <TableCell>${Math.round(salaries.reduce((a: number, b: number) => a + b, 0) / salaries.length).toLocaleString()}</TableCell>
-                                        <TableCell>${Math.min(...salaries).toLocaleString()}</TableCell>
-                                        <TableCell>${Math.max(...salaries).toLocaleString()}</TableCell>
-                                        <TableCell>{salaries.length}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Box>
+                    <Box>
+                        <Typography variant="h6" sx={{ mb: 1 }}>Department Breakdown</Typography>
+                        <DepartmentTable employees={employees} country={country} />
+                    </Box>
+                </>
             )}
         </Box>
     )

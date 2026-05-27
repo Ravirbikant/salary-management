@@ -40,7 +40,7 @@ describe('InsightsPage', () => {
     it('shows total employee count for selected country', async () => {
         render(<InsightsPage />)
         await waitFor(() => {
-            expect(screen.getByText('Total Employees: 2')).toBeInTheDocument()
+            expect(screen.getByText(`${mockEmployees.length}`)).toBeInTheDocument()
         })
     })
 
