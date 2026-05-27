@@ -200,4 +200,12 @@ describe('EmployeesPage', () => {
         expect(screen.getByText('Are you sure you want to delete this employee?')).toBeInTheDocument()
         expect(api.employeeService.delete).not.toHaveBeenCalled()
     })
+
+    it('shows loading state while fetching employees', async () => {
+        vi.spyOn(api.employeeService, 'getAll').mockImplementation(
+            () => new Promise(resolve => setTimeout(() => resolve([]), 100))
+        )
+        render(<EmployeesPage />)
+        expect(screen.getByText('Loading...')).toBeInTheDocument()
+    })
 })
