@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import { Box, Card, CardContent, FormControl, InputLabel, MenuItem, Paper, TableRow, TableHead, Table, TableContainer, Typography, TableBody, TableCell, Select } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import type { Employee } from '../types/employee'
 import { employeeService } from '../services/api'
@@ -120,6 +120,40 @@ function InsightsPage() {
                             </Typography>
                         </CardContent>
                     </Card>
+
+                    <Typography variant="h6" sx={{ mt: 2 }}>Department Breakdown</Typography>
+                    <TableContainer component={Paper}>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Department</TableCell>
+                                    <TableCell>Avg Salary</TableCell>
+                                    <TableCell>Min Salary</TableCell>
+                                    <TableCell>Max Salary</TableCell>
+                                    <TableCell>Employees</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {Object.entries(
+                                    employees
+                                        .filter(e => e.country === country)
+                                        .reduce((acc: any, e) => {
+                                            if (!acc[e.department]) acc[e.department] = []
+                                            acc[e.department].push(e.salary)
+                                            return acc
+                                        }, {})
+                                ).map(([dept, salaries]: any) => (
+                                    <TableRow key={dept}>
+                                        <TableCell>{dept}</TableCell>
+                                        <TableCell>${Math.round(salaries.reduce((a: number, b: number) => a + b, 0) / salaries.length).toLocaleString()}</TableCell>
+                                        <TableCell>${Math.min(...salaries).toLocaleString()}</TableCell>
+                                        <TableCell>${Math.max(...salaries).toLocaleString()}</TableCell>
+                                        <TableCell>{salaries.length}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </Box>
             )}
         </Box>
