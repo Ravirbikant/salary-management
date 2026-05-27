@@ -1,30 +1,37 @@
 import { Box, Card, CardContent, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Employee } from '../types/employee'
-
-const DUMMY_EMPLOYEES: Employee[] = [
-    { id: 1, first_name: 'Ravi', last_name: 'Sharma', job_title: 'Engineer', country: 'India', salary: 50000, department: 'Engineering', email: 'ravi@test.com' },
-    { id: 2, first_name: 'Anita', last_name: 'Patel', job_title: 'Engineer', country: 'India', salary: 70000, department: 'Engineering', email: 'anita@test.com' },
-    { id: 3, first_name: 'John', last_name: 'Doe', job_title: 'Manager', country: 'USA', salary: 90000, department: 'Management', email: 'john@test.com' },
-    { id: 4, first_name: 'Jane', last_name: 'Smith', job_title: 'Engineer', country: 'USA', salary: 80000, department: 'Engineering', email: 'jane@test.com' }
-]
+import { employeeService } from '../services/api'
 
 function InsightsPage() {
-    const [country, setCountry] = useState('India')
-    const [jobTitle, setJobTitle] = useState('Engineer')
+    const [employees, setEmployees] = useState<Employee[]>([])
+    const [country, setCountry] = useState('')
+    const [jobTitle, setJobTitle] = useState('')
+
+    useEffect(() => {
+        employeeService.getAll().then(data => {
+            setEmployees(data)
+            if (data.length > 0) {
+                const firstCountry = data[0].country
+                setCountry(firstCountry)
+                const firstTitle = data.find(e => e.country === firstCountry)?.job_title ?? ''
+                setJobTitle(firstTitle)
+            }
+        })
+    }, [])
 
     const countries = useMemo(
-        () => Array.from(new Set(DUMMY_EMPLOYEES.map(e => e.country))),
-        []
+        () => Array.from(new Set(employees.map(e => e.country))),
+        [employees]
     )
 
     const jobTitlesForCountry = useMemo(
-        () => Array.from(new Set(DUMMY_EMPLOYEES.filter(e => e.country === country).map(e => e.job_title))),
-        [country]
+        () => Array.from(new Set(employees.filter(e => e.country === country).map(e => e.job_title))),
+        [employees, country]
     )
 
     const stats = useMemo(() => {
-        const inCountry = DUMMY_EMPLOYEES.filter(e => e.country === country)
+        const inCountry = employees.filter(e => e.country === country)
         if (!inCountry.length) return null
 
         const salaries = inCountry.map(e => e.salary)
@@ -41,7 +48,7 @@ function InsightsPage() {
                 )
 
         return { min, max, avg, avgForJob }
-    }, [country, jobTitle])
+    }, [employees, country, jobTitle])
 
     return (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
