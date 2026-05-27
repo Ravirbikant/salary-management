@@ -4,6 +4,7 @@ import { vi } from 'vitest'
 import EmployeesPage from './EmployeesPage'
 import * as api from '../services/api'
 import type { Employee } from '../types/employee'
+import EmployeeModal from '../components/EmployeeModal'
 
 vi.mock('../services/api')
 
@@ -207,5 +208,13 @@ describe('EmployeesPage', () => {
         )
         render(<EmployeesPage />)
         expect(screen.getByText('Loading...')).toBeInTheDocument()
+    })
+
+    it('should close modal when cancel is clicked', async () => {
+        const onClose = vi.fn()
+        const user = userEvent.setup()
+        render(<EmployeeModal open={true} onClose={onClose} onSubmit={() => { }} />)
+        await user.click(screen.getByRole('button', { name: 'Cancel' }))
+        expect(onClose).toHaveBeenCalled()
     })
 })
