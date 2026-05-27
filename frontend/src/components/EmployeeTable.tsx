@@ -25,7 +25,7 @@ function EmployeeTable({ employees, page, onPageChange, onEdit, onDelete }: Prop
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Country</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }} align="right">Salary</TableCell>
                             <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Department</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Actions</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }} align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -36,7 +36,7 @@ function EmployeeTable({ employees, page, onPageChange, onEdit, onDelete }: Prop
                                 <TableCell>{emp.country}</TableCell>
                                 <TableCell align="right">${emp.salary.toLocaleString()}</TableCell>
                                 <TableCell>{emp.department}</TableCell>
-                                <TableCell>
+                                <TableCell align="center">
                                     <Button size="small" color="primary" onClick={() => onEdit(emp)}>Edit</Button>
                                     <Button size="small" color="error" onClick={() => onDelete(emp.id)}>Delete</Button>
                                 </TableCell>

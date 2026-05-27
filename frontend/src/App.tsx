@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
-import { AppBar, Toolbar, Button } from '@mui/material'
+import { AppBar, Toolbar, Button, Typography } from '@mui/material'
 import EmployeesPage from './pages/EmployeesPage'
 import InsightsPage from './pages/InsightsPage'
 
@@ -8,6 +8,9 @@ function Navbar() {
   return (
     <AppBar position="static" color="primary">
       <Toolbar sx={{ gap: 2 }}>
+        <Typography variant="h6" sx={{ flexGrow: 0, mr: 3, fontWeight: 'bold', color: 'white' }}>
+          SalaryIQ
+        </Typography>
         <Button
           component={Link}
           to="/"
